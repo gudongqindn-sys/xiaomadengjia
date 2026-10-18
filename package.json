@@ -1,0 +1,10 @@
+{
+  "name": "basketball-english",
+  "version": "0.1.0",
+  "private": true,
+  "description": "篮球主题英语口语小程序 V1：首关交互原型",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.js"
+  }
+}

@@ -1,0 +1,1909 @@
+<title>篮球英语首关</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0f1a33;
+  --panel: #18264a;
+  --panel-2: #213361;
+  --line: #2e4479;
+  --text: #f3f5fb;
+  --muted: #a8b3cf;
+  --accent: #ff8a2a;
+  --accent-ink: #1a1206;
+  --good: #3ccf91;
+  --warn: #f2c14e;
+  --bad: #e5534b;
+  --court: #c9874a;
+  --court-line: #f6e2c4;
+  --sim: #b48cff;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.5 -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+  -webkit-tap-highlight-color: transparent;
+}
+#app { max-width: 480px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; }
+.page { flex: 1; padding-block: 16px 96px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.page.play { padding-block-end: 24px; }
+.btn:focus-visible, .opt:focus-visible, .nav button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .court-wrap #ball { transition: none; } .court-wrap .pick { animation: none; } }
+h1 { font-size: 22px; margin: 4px 0 12px; }
+h2 { font-size: 17px; margin: 20px 0 8px; }
+p { margin: 6px 0; }
+.muted { color: var(--muted); font-size: 14px; }
+.small { font-size: 13px; }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin: 12px 0; }
+.hero { background: linear-gradient(160deg, #24408e 0%, #18264a 70%); }
+.tag { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--panel-2); color: var(--muted); margin-right: 6px; }
+.tag.sim { background: rgba(180,140,255,.18); color: var(--sim); }
+.tag.virtual { background: rgba(229,83,75,.15); color: #ff9c95; }
+.banner-sim { border: 1px dashed var(--sim); color: var(--sim); background: rgba(180,140,255,.08); border-radius: 10px; padding: 8px 10px; font-size: 13px; margin: 8px 0; }
+
+button { font: inherit; color: inherit; border: 0; cursor: pointer; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 10px 16px; border-radius: 12px; background: var(--panel-2); border: 1px solid var(--line); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+.btn.ghost { background: transparent; }
+.btn.sim { border-color: var(--sim); color: var(--sim); background: rgba(180,140,255,.08); }
+.btn.block { width: 100%; }
+.btn:disabled { opacity: .45; cursor: default; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.row > .grow { flex: 1; }
+
+.nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; display: flex; background: #0b1428; border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom); }
+.nav button { flex: 1; padding: 10px 0 12px; background: none; color: var(--muted); font-size: 13px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.nav button .ico { font-size: 20px; }
+.nav button.on { color: var(--accent); }
+
+.topbar { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.topbar .title { flex: 1; font-weight: 700; }
+.progress { height: 6px; background: var(--panel-2); border-radius: 99px; overflow: hidden; margin-bottom: 12px; }
+.progress > i { display: block; height: 100%; background: var(--accent); }
+.chapter { font-size: 13px; color: var(--accent); letter-spacing: .05em; }
+
+.chat { display: flex; flex-direction: column; gap: 10px; margin: 10px 0; }
+.bubble { max-width: 88%; padding: 10px 12px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); }
+.bubble.me { align-self: flex-end; background: #2b3f74; border-color: #3d5aa3; }
+.bubble.sys { align-self: center; background: transparent; border: 1px dashed var(--line); color: var(--muted); font-size: 13px; }
+.bubble .who { font-size: 12px; font-weight: 700; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; }
+.bubble .who .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.bubble .zh { color: var(--muted); font-size: 13px; margin-top: 4px; }
+.bubble .hidden-text { color: var(--muted); font-style: italic; }
+.bubble .audio { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.bubble .audio button { font-size: 13px; padding: 4px 10px; border-radius: 99px; background: var(--panel-2); border: 1px solid var(--line); min-height: 32px; }
+
+.speak-box { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 12px; margin-top: 8px; }
+.speak-box textarea { width: 100%; min-height: 64px; resize: none; background: #0b1428; color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 10px; font: inherit; }
+.hint { border-left: 3px solid var(--warn); padding: 6px 10px; margin: 8px 0; background: rgba(242,193,78,.08); border-radius: 0 8px 8px 0; font-size: 14px; }
+.hint b { color: var(--warn); }
+
+.court-wrap { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--court); }
+.court-wrap svg { display: block; width: 100%; height: auto; }
+.court-wrap .player { cursor: pointer; }
+.court-wrap #ball { transition: transform .45s ease-in-out; }
+.court-wrap .pick { animation: pulse 1.2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+
+.opts { display: grid; gap: 8px; margin: 10px 0; }
+.opt { text-align: left; padding: 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); }
+.opt.on { border-color: var(--accent); background: rgba(255,138,42,.12); }
+.opt .why { color: var(--muted); font-size: 13px; }
+
+.timing { position: relative; height: 40px; background: var(--panel-2); border-radius: 99px; margin: 12px 0; overflow: hidden; }
+.timing .zone { position: absolute; top: 0; bottom: 0; left: 36%; width: 28%; background: rgba(60,207,145,.35); }
+.timing .zone.core { left: 44%; width: 12%; background: rgba(60,207,145,.7); }
+.timing .marker { position: absolute; top: 4px; bottom: 4px; width: 6px; margin-left: -3px; border-radius: 3px; background: #fff; }
+
+.grid-pick { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 8px 0; }
+.grid-pick button { min-height: 44px; border-radius: 10px; background: var(--panel-2); border: 1px solid var(--line); font-weight: 700; }
+.grid-pick button.on { border-color: var(--accent); color: var(--accent); }
+.swatch { width: 100%; height: 36px; border-radius: 8px; display: block; }
+
+.roster { display: grid; gap: 8px; }
+.member { display: flex; gap: 12px; align-items: center; }
+.avatar { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; color: #0b1428; flex: none; }
+
+.ability { display: flex; justify-content: space-between; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.ability:last-child { border-bottom: 0; }
+.status { font-size: 12px; padding: 2px 8px; border-radius: 99px; background: var(--panel-2); color: var(--muted); white-space: nowrap; align-self: flex-start; }
+.status.ok { background: rgba(60,207,145,.15); color: var(--good); }
+.status.sim { background: rgba(180,140,255,.15); color: var(--sim); }
+.status.hint { background: rgba(242,193,78,.15); color: var(--warn); }
+
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat { background: var(--panel-2); border-radius: 10px; padding: 10px; text-align: center; }
+.stat b { display: block; font-size: 22px; }
+.stat span { font-size: 12px; color: var(--muted); }
+input[type=text] { width: 100%; background: #0b1428; color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 10px; font: inherit; }
+label.switch { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; }
+.result-big { font-size: 20px; font-weight: 800; text-align: center; margin: 10px 0; }
+</style>
+<div id="app"></div>
+  <script>
+// 规则引擎：意图匹配、练习证据、学习状态、奖励只发一次。
+// 纯函数，不碰 DOM，浏览器和 node 测试共用。
+// 关键通关条件、奖励和复习更新都在这里由明确规则决定，不交给 AI 临场判断。
+(function (root, factory) {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.BBEngine = api;
+})(typeof self !== 'undefined' ? self : this, function () {
+  'use strict';
+
+  const DAY = 24 * 60 * 60 * 1000;
+
+  const CONTRACTIONS = [
+    [/\bi'm\b/g, 'i am'], [/\blet's\b/g, 'let us'], [/\bhe's\b/g, 'he is'],
+    [/\bshe's\b/g, 'she is'], [/\bit's\b/g, 'it is'], [/\bi'll\b/g, 'i will'],
+    [/\bwe'll\b/g, 'we will'], [/\bcan't\b/g, 'cannot'], [/\bdon't\b/g, 'do not'],
+    [/\bwhat's\b/g, 'what is'], [/\bthat's\b/g, 'that is'],
+  ];
+
+  function normalize(text) {
+    let t = String(text || '').toLowerCase().replace(/[’‘`]/g, "'");
+    for (const [re, rep] of CONTRACTIONS) t = t.replace(re, rep);
+    return t.replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
+  // 按整词匹配："pass" 不会命中 "passing"，两种形式要分别写进词表
+  function has(norm, phrase) {
+    const p = normalize(phrase);
+    return p.length > 0 && (' ' + norm + ' ').includes(' ' + p + ' ');
+  }
+
+  function firstHit(norm, list) {
+    for (const w of list || []) if (has(norm, w)) return w;
+    return null;
+  }
+
+  function fullMatch(norm, intent) {
+    const groups = intent.all || [];
+    if (!groups.length) return null;
+    const hits = [];
+    for (const g of groups) {
+      const h = firstHit(norm, g);
+      if (!h) return null;
+      hits.push(h);
+    }
+    return hits;
+  }
+
+  function slotValue(intent, norm, hits) {
+    const s = intent.slot;
+    if (!s) return {};
+    const words = Object.keys(s.map);
+    const fromHits = (hits || []).find((h) => s.map[normalize(h)]);
+    const found = fromHits ? normalize(fromHits) : firstHit(norm, words);
+    return { [s.name]: found ? s.map[normalize(found)] : s.default };
+  }
+
+  /**
+   * 判断一句话在当前任务里是什么意思。
+   * 返回 status：
+   *   matched   意思清楚（quality: sentence 成句 / keyword 只说了关键词 / partial 说了句子但只踩到关键词）
+   *   redirect  听懂了，但这个做法当前不可行（例：篮下被盯防）——说明原因，允许重说
+   *   ambiguous 语义不明确，先追问，确认前不推进关键动作
+   *   off_task  和当前任务无关，说明还缺什么
+   *   empty     没有内容
+   */
+  function matchUtterance(spec, text) {
+    const norm = normalize(text);
+    if (!norm) return { status: 'empty' };
+    const tokens = norm.split(' ').length;
+    const intents = spec.intents || [];
+
+    for (const intent of intents) {
+      const hits = fullMatch(norm, intent);
+      if (hits) {
+        return {
+          status: 'matched', intent, quality: tokens >= 3 ? 'sentence' : 'keyword',
+          slots: slotValue(intent, norm, hits),
+        };
+      }
+    }
+    for (const r of spec.redirects || []) {
+      if (firstHit(norm, r.any)) return { status: 'redirect', reply: r.reply };
+    }
+    for (const intent of intents) {
+      if (firstHit(norm, intent.keyword)) {
+        return {
+          status: 'matched', intent, quality: tokens <= 2 ? 'keyword' : 'partial',
+          slots: slotValue(intent, norm, null),
+        };
+      }
+    }
+    for (const a of spec.ambiguous || []) {
+      if (firstHit(norm, a.any)) return { status: 'ambiguous', reply: a.clarify };
+    }
+    return { status: 'off_task', reply: spec.offTask || 'Can you tell me again?' };
+  }
+
+  /**
+   * 把一次作答归成学习记录里的结果。
+   * hintLevel：0 没看提示，1 关键词，2 句型，3 完整答案。
+   * inputMode：voice 真实录音 / simulated 原型模拟输入 / click 点击继续。
+   */
+  function classify({ match, hintLevel, inputMode, asrUncertain }) {
+    if (asrUncertain) return 'asr_uncertain';
+    if (inputMode === 'click') return 'click_continue';
+    if (!match || match.status === 'empty') return 'empty';
+    if (match.status === 'ambiguous') return 'clarify';
+    if (match.status === 'redirect') return 'redirect';
+    if (match.status === 'off_task') return 'off_task';
+    if (hintLevel >= 3) return 'full_answer';
+    if (hintLevel >= 1) return 'with_hint';
+    return match.quality === 'sentence' ? 'independent' : 'keyword';
+  }
+
+  // 只有真实录音、识别可靠、没看提示、意思成句，才算独立口语证据。
+  // 原型模拟输入一律不算；识别服务没有给可靠度时（null）也不算，不编造。
+  function countsAsSpokenEvidence(ev) {
+    return ev.inputMode === 'voice' && ev.recognitionReliable === true && ev.result === 'independent';
+  }
+
+  const PROGRESS_RESULTS = new Set(['independent', 'keyword', 'with_hint', 'full_answer', 'click_continue']);
+  function advancesStory(result) {
+    return PROGRESS_RESULTS.has(result);
+  }
+
+  function makeEvidence({ levelId, stepId, targetId, text, match, hintLevel, inputMode, asrUncertain, now }) {
+    const result = classify({ match, hintLevel, inputMode, asrUncertain });
+    const ev = {
+      at: now,
+      levelId, stepId, targetId,
+      text: inputMode === 'click' ? '' : String(text || ''),
+      intentId: match && match.intent ? match.intent.id : null,
+      hintLevel: hintLevel || 0,
+      inputMode,
+      validRecording: inputMode === 'voice',
+      // 原型没有识别服务，可靠度未知，记 null 而不是猜一个数
+      recognitionReliable: null,
+      result,
+    };
+    ev.spokenEvidence = countsAsSpokenEvidence(ev);
+    return ev;
+  }
+
+  // 首轮参数：到期间隔随表现调整，不用固定复现次数宣称掌握
+  const REVIEW_DAYS = {
+    independent: 2, keyword: 1, with_hint: 1, full_answer: 1, click_continue: 1,
+  };
+
+  /**
+   * 更新一个目标表达的学习状态。
+   * 字段：understoodAt 听懂、promptedAt 提示后能说、independentAt 独立能用、spacedAt 间隔后仍能用、
+   * simulatedIndependentAt 原型里模拟输入成句（单独记，不冒充真实口语）。
+   */
+  function updateLearning(state, ev) {
+    const s = Object.assign({ targetId: ev.targetId, attempts: 0 }, state || {});
+    if (!advancesStory(ev.result)) return s; // 误听、追问、跑题不改学习状态
+    s.attempts += 1;
+    s.lastResult = ev.result;
+    if (ev.result === 'with_hint') s.promptedAt = s.promptedAt ?? ev.at;
+    if (ev.result === 'independent' || ev.result === 'keyword') {
+      if (ev.spokenEvidence) {
+        if (s.independentAt != null && ev.at - s.independentAt >= DAY) s.spacedAt = s.spacedAt ?? ev.at;
+        s.independentAt = s.independentAt ?? ev.at;
+      } else if (ev.inputMode === 'simulated' && ev.result === 'independent') {
+        s.simulatedIndependentAt = s.simulatedIndependentAt ?? ev.at;
+      }
+    }
+    const days = s.spacedAt ? 4 : (REVIEW_DAYS[ev.result] || 1);
+    s.nextReviewAt = ev.at + days * DAY;
+    return s;
+  }
+
+  function markUnderstood(state, targetId, now) {
+    const s = Object.assign({ targetId, attempts: 0 }, state || {});
+    s.understoodAt = s.understoodAt ?? now;
+    return s;
+  }
+
+  // 奖励只发一次：重复刷同一段不再增加成果
+  function grantOnce(game, rewardId, now) {
+    const granted = Object.assign({}, game.rewards || {});
+    if (granted[rewardId]) return { game, granted: false };
+    granted[rewardId] = now;
+    return { game: Object.assign({}, game, { rewards: granted }), granted: true };
+  }
+
+  // 球场行动：战术选择 + 操作手感共同决定结果。识别问题不进这里。
+  function playOutcome(timing) {
+    if (timing === 'great') return { score: 2, text: '漂亮！球进了！' };
+    if (timing === 'good') return { score: 2, text: '进了！' };
+    return { score: 0, text: '球弹框而出，差一点。配合是对的，下次手感会更好。' };
+  }
+
+  function timingGrade(pos) {
+    const d = Math.abs(pos - 0.5);
+    if (d <= 0.06) return 'great';
+    if (d <= 0.14) return 'good';
+    return 'miss';
+  }
+
+  /**
+   * 当天只挑一个点反馈：优先“只说关键词”的一句给完整句型；
+   * 都成句了，就给一个稍进阶的说法；用过完整答案的，鼓励下次先自己试。
+   */
+  function pickFeedback(evidence, level) {
+    const done = evidence.filter((e) => e.levelId === level.id && advancesStory(e.result));
+    const targets = Object.fromEntries(level.targets.map((t) => [t.id, t]));
+    const kw = done.find((e) => e.result === 'keyword');
+    if (kw) {
+      const t = targets[kw.targetId];
+      return { kind: 'pattern', targetId: kw.targetId, text: `你说了 "${kw.text}"，意思队友懂了。下次试着说完整：${t ? t.text : ''}` };
+    }
+    const full = done.find((e) => e.result === 'full_answer' || e.result === 'click_continue');
+    if (full) {
+      const t = targets[full.targetId];
+      return { kind: 'retry', targetId: full.targetId, text: `「${t ? t.text : ''}」这句今天看了答案，过两天换个情境再自己说一次。` };
+    }
+    return { kind: 'stretch', targetId: 't_because', text: '今天每句都是自己说的！下次可以多加一句理由：Pass to Ben, because he is open.' };
+  }
+
+  return {
+    normalize, matchUtterance, classify, makeEvidence, countsAsSpokenEvidence, advancesStory,
+    updateLearning, markUnderstood, grantOnce, playOutcome, timingGrade, pickFeedback, DAY,
+  };
+});
+</script>
+  <script>
+// 由 scripts/build.mjs 从 content/level-01.json 生成，不要手改
+window.LEVEL_DATA = {
+  "id": "level-01",
+  "title": "第一次训练赛",
+  "titleEn": "First Practice Game",
+  "scene": "校园球馆",
+  "estimatedMinutes": 12,
+  "goal": "完成两次经过沟通的配合，并在赛后介绍自己的一个选择",
+  "reviewStatus": "草稿：英语自然度、难度、答案一致性待人工审定",
+  "characters": {
+    "coach": {
+      "name": "Coach Lee",
+      "role": "教练",
+      "virtual": true,
+      "color": "#f2a33a"
+    },
+    "alex": {
+      "name": "Alex",
+      "role": "组织后卫",
+      "trait": "擅长传球",
+      "number": 5,
+      "virtual": true,
+      "color": "#4fa3ff"
+    },
+    "ben": {
+      "name": "Ben",
+      "role": "得分手",
+      "trait": "擅长投篮",
+      "number": 9,
+      "virtual": true,
+      "color": "#3ccf91"
+    },
+    "mia": {
+      "name": "Mia",
+      "role": "校报小记者",
+      "virtual": true,
+      "color": "#e46fb0"
+    },
+    "opponents": {
+      "name": "Red Hawks",
+      "role": "对手（电脑角色）",
+      "virtual": true,
+      "color": "#e5534b"
+    }
+  },
+  "targets": [
+    {
+      "id": "t_good_at",
+      "text": "I'm good at ...",
+      "meaningZh": "我擅长……",
+      "isNew": false,
+      "source": "Super Minds 3 能力表达（待对照版次）"
+    },
+    {
+      "id": "t_pass_to",
+      "text": "Pass to ...",
+      "meaningZh": "传给……",
+      "isNew": true,
+      "source": "篮球任务"
+    },
+    {
+      "id": "t_because",
+      "text": "Because he is ...",
+      "meaningZh": "因为他……",
+      "isNew": true,
+      "source": "日常通用表达"
+    },
+    {
+      "id": "t_well",
+      "text": "We ... well.",
+      "meaningZh": "我们……得好",
+      "isNew": true,
+      "source": "日常通用表达"
+    },
+    {
+      "id": "t_next_time",
+      "text": "Next time, I want to ...",
+      "meaningZh": "下次我想……",
+      "isNew": true,
+      "source": "日常通用表达"
+    }
+  ],
+  "steps": [
+    {
+      "id": "s_intro",
+      "type": "speak",
+      "chapter": "进入球队",
+      "speaker": "coach",
+      "line": "Hi! I'm Coach Lee. Welcome to the team. What are you good at?",
+      "lineZh": "嗨！我是李教练。欢迎加入球队。你擅长什么？",
+      "target": "t_good_at",
+      "intents": [
+        {
+          "id": "good_at",
+          "all": [
+            [
+              "good at",
+              "i can",
+              "i like",
+              "i love",
+              "best at",
+              "great at",
+              "i am a"
+            ],
+            [
+              "pass",
+              "passing",
+              "passer",
+              "shoot",
+              "shooting",
+              "shooter",
+              "defend",
+              "defending",
+              "defense",
+              "dribble",
+              "dribbling",
+              "run",
+              "running",
+              "rebound",
+              "rebounding",
+              "jump",
+              "jumping"
+            ]
+          ],
+          "keyword": [
+            "passing",
+            "pass",
+            "shooting",
+            "shoot",
+            "defending",
+            "defense",
+            "dribbling",
+            "running",
+            "rebounding",
+            "jumping"
+          ],
+          "slot": {
+            "name": "skill",
+            "map": {
+              "pass": "passing",
+              "passing": "passing",
+              "passer": "passing",
+              "shoot": "shooting",
+              "shooting": "shooting",
+              "shooter": "shooting",
+              "defend": "defending",
+              "defending": "defending",
+              "defense": "defending",
+              "dribble": "dribbling",
+              "dribbling": "dribbling",
+              "run": "running",
+              "running": "running",
+              "rebound": "rebounding",
+              "rebounding": "rebounding",
+              "jump": "jumping",
+              "jumping": "jumping"
+            },
+            "default": "passing"
+          },
+          "reply": "{skill}? Great! Every team needs that.",
+          "replyKeyword": "Oh, {skill}! Nice. You can say: I'm good at {skill}."
+        }
+      ],
+      "ambiguous": [
+        {
+          "any": [
+            "good",
+            "i am good",
+            "yes",
+            "basketball"
+          ],
+          "clarify": "Good at what? Passing, shooting, or something else?"
+        }
+      ],
+      "offTask": "Tell me one thing you can do well in basketball.",
+      "hints": [
+        {
+          "level": 1,
+          "label": "关键词",
+          "words": [
+            "good at",
+            "passing",
+            "shooting",
+            "defending"
+          ]
+        },
+        {
+          "level": 2,
+          "label": "句型",
+          "pattern": "I'm good at ____."
+        },
+        {
+          "level": 3,
+          "label": "完整答案",
+          "full": "I'm good at passing."
+        }
+      ],
+      "followUp": {
+        "when": "sentence",
+        "line": "Cool. Why do you like {skill}?",
+        "lineZh": "酷。你为什么喜欢{skillZh}？",
+        "target": "t_because",
+        "optional": true,
+        "intents": [
+          {
+            "id": "reason",
+            "all": [
+              [
+                "because",
+                "it is",
+                "it's",
+                "fun",
+                "help",
+                "i like",
+                "i love",
+                "cool",
+                "easy",
+                "team",
+                "score",
+                "win"
+              ]
+            ],
+            "keyword": [
+              "fun",
+              "cool",
+              "easy"
+            ],
+            "reply": "That makes sense. Let's meet your team!",
+            "replyKeyword": "Fun, yes! You can say: Because it is fun."
+          }
+        ],
+        "offTask": "Just tell me one reason. It's OK to keep it short.",
+        "hints": [
+          {
+            "level": 1,
+            "label": "关键词",
+            "words": [
+              "because",
+              "fun",
+              "help my team"
+            ]
+          },
+          {
+            "level": 2,
+            "label": "句型",
+            "pattern": "Because it is ____."
+          },
+          {
+            "level": 3,
+            "label": "完整答案",
+            "full": "Because it is fun."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s_meet",
+      "type": "listen",
+      "chapter": "了解队友",
+      "target": "t_good_at",
+      "messages": [
+        {
+          "from": "alex",
+          "text": "Hi, I'm Alex. I'm good at passing.",
+          "textZh": "嗨，我是 Alex。我擅长传球。"
+        },
+        {
+          "from": "ben",
+          "text": "Hey, I'm Ben. I'm good at shooting.",
+          "textZh": "嘿，我是 Ben。我擅长投篮。"
+        }
+      ],
+      "check": {
+        "question": "谁擅长投篮？",
+        "options": [
+          "alex",
+          "ben"
+        ],
+        "answer": "ben",
+        "wrongReply": "再听一次 Ben 和 Alex 的消息？"
+      }
+    },
+    {
+      "id": "s_play1",
+      "type": "court",
+      "chapter": "第一次配合",
+      "situation": "你在三分线外持球。Ben 在左侧篮下没人防，Alex 在右侧也有空位。",
+      "coachLine": "You have the ball. Tell your team the plan.",
+      "coachLineZh": "球在你手上。把计划告诉队友。",
+      "target": "t_pass_to",
+      "positions": {
+        "me": [
+          50,
+          62
+        ],
+        "alex": [
+          80,
+          46
+        ],
+        "ben": [
+          18,
+          24
+        ],
+        "o1": [
+          50,
+          52
+        ],
+        "o2": [
+          72,
+          40
+        ],
+        "o3": [
+          40,
+          22
+        ]
+      },
+      "options": [
+        {
+          "id": "ben",
+          "label": "传给 Ben",
+          "why": "Ben 篮下空位，又擅长投篮",
+          "result": "ben_shoots"
+        },
+        {
+          "id": "alex",
+          "label": "传给 Alex",
+          "why": "Alex 有空位，擅长传球，可以再分给 Ben",
+          "result": "alex_relay"
+        }
+      ],
+      "intents": [
+        {
+          "id": "pass_to_ben",
+          "option": "ben",
+          "all": [
+            [
+              "pass",
+              "past",
+              "give",
+              "throw",
+              "passing"
+            ],
+            [
+              "ben"
+            ]
+          ],
+          "keyword": [
+            "ben"
+          ],
+          "reply": "Got it! I'm open!",
+          "replyKeyword": "Me? OK! Next time you can say: Pass to Ben.",
+          "speaker": "ben"
+        },
+        {
+          "id": "pass_to_alex",
+          "option": "alex",
+          "all": [
+            [
+              "pass",
+              "past",
+              "give",
+              "throw",
+              "passing"
+            ],
+            [
+              "alex"
+            ]
+          ],
+          "keyword": [
+            "alex"
+          ],
+          "reply": "Sure! Ben, get ready!",
+          "replyKeyword": "Me? OK! Next time you can say: Pass to Alex.",
+          "speaker": "alex"
+        }
+      ],
+      "redirects": [
+        {
+          "any": [
+            "shoot",
+            "i will shoot",
+            "my shot"
+          ],
+          "reply": "You're far from the basket. Who is open?"
+        }
+      ],
+      "ambiguous": [
+        {
+          "any": [
+            "pass",
+            "past",
+            "give",
+            "throw",
+            "him",
+            "to him"
+          ],
+          "clarify": "Pass to who? Ben or Alex?"
+        }
+      ],
+      "offTask": "We need a plan. Who should get the ball?",
+      "hints": [
+        {
+          "level": 1,
+          "label": "关键词",
+          "words": [
+            "pass",
+            "Ben",
+            "Alex"
+          ]
+        },
+        {
+          "level": 2,
+          "label": "句型",
+          "pattern": "Pass to ____."
+        },
+        {
+          "level": 3,
+          "label": "完整答案",
+          "full": "Pass to Ben."
+        }
+      ],
+      "action": {
+        "kind": "pass",
+        "label": "传球"
+      },
+      "followUp": {
+        "when": "sentence",
+        "line": "Nice play! Why did you pick {optionName}?",
+        "lineZh": "打得好！你为什么选{optionName}？",
+        "target": "t_because",
+        "optional": true,
+        "intents": [
+          {
+            "id": "reason_play",
+            "all": [
+              [
+                "because",
+                "good at",
+                "open",
+                "free",
+                "near",
+                "close",
+                "nobody",
+                "no one",
+                "shooter",
+                "can shoot",
+                "can pass"
+              ]
+            ],
+            "keyword": [
+              "open",
+              "free",
+              "shooting",
+              "passing"
+            ],
+            "reply": "Smart choice.",
+            "replyKeyword": "Yes! You can say: Because he is open."
+          }
+        ],
+        "offTask": "Tell me one reason. Was he open? Is he good at something?",
+        "hints": [
+          {
+            "level": 1,
+            "label": "关键词",
+            "words": [
+              "because",
+              "open",
+              "good at shooting"
+            ]
+          },
+          {
+            "level": 2,
+            "label": "句型",
+            "pattern": "Because he is ____."
+          },
+          {
+            "level": 3,
+            "label": "完整答案",
+            "full": "Because he is good at shooting."
+          }
+        ]
+      }
+    },
+    {
+      "id": "s_play2",
+      "type": "court",
+      "chapter": "暂停之后",
+      "situation": "暂停！对手现在盯住了 Ben。Alex 在右侧空位，你离篮筐也近了，前面没人。",
+      "coachLine": "Time-out! They are guarding Ben now. What's your plan?",
+      "coachLineZh": "暂停！他们现在盯住 Ben 了。你的计划是什么？",
+      "target": "t_pass_to",
+      "positions": {
+        "me": [
+          46,
+          40
+        ],
+        "alex": [
+          82,
+          34
+        ],
+        "ben": [
+          20,
+          26
+        ],
+        "o1": [
+          24,
+          22
+        ],
+        "o2": [
+          30,
+          30
+        ],
+        "o3": [
+          64,
+          54
+        ]
+      },
+      "options": [
+        {
+          "id": "alex",
+          "label": "传给 Alex",
+          "why": "Alex 右侧空位",
+          "result": "alex_shoots"
+        },
+        {
+          "id": "me",
+          "label": "自己投",
+          "why": "你离篮筐近，前面没人防",
+          "result": "me_shoots"
+        }
+      ],
+      "intents": [
+        {
+          "id": "pass_to_alex",
+          "option": "alex",
+          "all": [
+            [
+              "pass",
+              "past",
+              "give",
+              "throw",
+              "passing"
+            ],
+            [
+              "alex"
+            ]
+          ],
+          "keyword": [
+            "alex"
+          ],
+          "reply": "I'm open! Pass it!",
+          "replyKeyword": "OK! You can say: Pass to Alex.",
+          "speaker": "alex"
+        },
+        {
+          "id": "i_shoot",
+          "option": "me",
+          "all": [
+            [
+              "i will shoot",
+              "i shoot",
+              "i can shoot",
+              "let me shoot",
+              "i want to shoot",
+              "i will take",
+              "my shot",
+              "i am open",
+              "shoot"
+            ]
+          ],
+          "keyword": [
+            "shoot",
+            "me"
+          ],
+          "reply": "Go for it! We'll get the rebound!",
+          "replyKeyword": "Shoot? Go! You can say: I can shoot.",
+          "speaker": "alex"
+        }
+      ],
+      "redirects": [
+        {
+          "any": [
+            "ben"
+          ],
+          "reply": "Ben is covered now. Look again. Who is open?"
+        }
+      ],
+      "ambiguous": [
+        {
+          "any": [
+            "pass",
+            "past",
+            "give",
+            "throw",
+            "him",
+            "to him"
+          ],
+          "clarify": "Pass to who? Ben is covered. Alex?"
+        }
+      ],
+      "offTask": "The defense changed. Who is open now?",
+      "hints": [
+        {
+          "level": 1,
+          "label": "关键词",
+          "words": [
+            "Alex",
+            "open",
+            "shoot"
+          ]
+        },
+        {
+          "level": 2,
+          "label": "句型",
+          "pattern": "Pass to ____. / I can ____."
+        },
+        {
+          "level": 3,
+          "label": "完整答案",
+          "full": "Pass to Alex."
+        }
+      ],
+      "action": {
+        "kind": "pass_or_shoot",
+        "label": "出手"
+      }
+    },
+    {
+      "id": "s_interview1",
+      "type": "speak",
+      "chapter": "赛后采访",
+      "speaker": "mia",
+      "line": "Hi, I'm Mia from the school news. Great game! Which play worked well?",
+      "lineZh": "嗨，我是校报的 Mia。打得真好！哪次配合效果好？",
+      "target": "t_well",
+      "intents": [
+        {
+          "id": "worked_well",
+          "all": [
+            [
+              "pass",
+              "passed",
+              "passing",
+              "shot",
+              "shoot",
+              "play",
+              "played",
+              "teamwork",
+              "worked",
+              "well",
+              "good",
+              "great",
+              "ben",
+              "alex",
+              "together"
+            ]
+          ],
+          "keyword": [
+            "pass",
+            "passing",
+            "teamwork",
+            "ben",
+            "alex"
+          ],
+          "reply": "Wow. That sounds like real teamwork.",
+          "replyKeyword": "Teamwork! You can say: We passed the ball well."
+        }
+      ],
+      "offTask": "Just tell me about one good moment in the game.",
+      "hints": [
+        {
+          "level": 1,
+          "label": "关键词",
+          "words": [
+            "passed",
+            "the ball",
+            "well"
+          ]
+        },
+        {
+          "level": 2,
+          "label": "句型",
+          "pattern": "We ____ the ball well."
+        },
+        {
+          "level": 3,
+          "label": "完整答案",
+          "full": "We passed the ball well."
+        }
+      ]
+    },
+    {
+      "id": "s_interview2",
+      "type": "speak",
+      "chapter": "赛后采访",
+      "speaker": "mia",
+      "line": "What do you want to do better next time?",
+      "lineZh": "下次你想把什么做得更好？",
+      "target": "t_next_time",
+      "intents": [
+        {
+          "id": "next_goal",
+          "all": [
+            [
+              "next time",
+              "want to",
+              "i will",
+              "i want",
+              "better",
+              "more",
+              "practice",
+              "try",
+              "learn",
+              "improve"
+            ]
+          ],
+          "keyword": [
+            "shoot",
+            "shooting",
+            "pass",
+            "passing",
+            "defend",
+            "defense",
+            "run",
+            "dribble"
+          ],
+          "reply": "Good goal! See you at the next practice.",
+          "replyKeyword": "Nice goal! You can say: Next time, I want to shoot better."
+        }
+      ],
+      "offTask": "Tell me one thing you want to practice.",
+      "hints": [
+        {
+          "level": 1,
+          "label": "关键词",
+          "words": [
+            "next time",
+            "want to",
+            "better"
+          ]
+        },
+        {
+          "level": 2,
+          "label": "句型",
+          "pattern": "Next time, I want to ____ better."
+        },
+        {
+          "level": 3,
+          "label": "完整答案",
+          "full": "Next time, I want to shoot better."
+        }
+      ]
+    },
+    {
+      "id": "s_feedback",
+      "type": "feedback",
+      "chapter": "收尾"
+    },
+    {
+      "id": "s_reward",
+      "type": "reward",
+      "chapter": "收尾",
+      "reward": {
+        "id": "r_level01_jersey",
+        "label": "第一套队服",
+        "numbers": [
+          3,
+          7,
+          8,
+          11,
+          13,
+          23,
+          24,
+          30
+        ],
+        "colors": [
+          {
+            "id": "navy",
+            "label": "深蓝",
+            "hex": "#24408e"
+          },
+          {
+            "id": "red",
+            "label": "红",
+            "hex": "#c8372d"
+          },
+          {
+            "id": "black",
+            "label": "黑",
+            "hex": "#22252b"
+          },
+          {
+            "id": "green",
+            "label": "绿",
+            "hex": "#1f8a5b"
+          }
+        ]
+      }
+    }
+  ],
+  "abilities": [
+    {
+      "id": "a_intro",
+      "label": "会介绍自己擅长什么",
+      "target": "t_good_at"
+    },
+    {
+      "id": "a_plan",
+      "label": "会提出配合",
+      "target": "t_pass_to"
+    },
+    {
+      "id": "a_reason",
+      "label": "会解释选择",
+      "target": "t_because"
+    },
+    {
+      "id": "a_goal",
+      "label": "会说下次目标",
+      "target": "t_next_time"
+    }
+  ],
+  "endCondition": "两次球场配合都有沟通（含看答案或点击继续，剧情照常推进）＋两段采访＋领取队服"
+};
+</script>
+  <script>
+// 首关交互原型（阶段一）。
+// 语音是模拟的：孩子说的话由孩子或家长打字输入，记录里一律标 simulated，不算真实口语证据。
+(function () {
+  'use strict';
+
+  const E = window.BBEngine;
+  const LEVEL = window.LEVEL_DATA;
+  const STORE_KEY = 'bbe.prototype.v1';
+  const SKILL_ZH = {
+    passing: '传球', shooting: '投篮', defending: '防守', dribbling: '运球',
+    running: '跑动', rebounding: '抢篮板', jumping: '弹跳',
+  };
+  const RESULT_ZH = {
+    independent: '自己成句', keyword: '只说关键词', with_hint: '看提示后', full_answer: '看完整答案',
+    click_continue: '点击继续', asr_uncertain: '没听清（不算错）', clarify: '意思不明确，已追问',
+    redirect: '当前做不了，已说明', off_task: '和任务无关', empty: '没有内容',
+  };
+  const MODE_ZH = { simulated: '模拟输入', voice: '真实录音', click: '点击' };
+
+  // ---------- 存储（读写失败时照常运行，只是不保存） ----------
+  function fresh() {
+    return {
+      version: 1,
+      team: { name: 'Suzhou Sparks' },
+      player: { skill: null },
+      game: { rewards: {}, jersey: null },
+      progress: {},
+      evidence: [],
+      learning: {},
+      settings: { subtitles: false, minutes: 12 },
+      totals: { playMs: 0, runsDone: 0 },
+      run: null,
+    };
+  }
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return null;
+      const s = JSON.parse(raw);
+      return s && s.version === 1 ? Object.assign(fresh(), s) : null;
+    } catch (e) { return null; }
+  }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* 隐私模式等，不保存 */ }
+  }
+  let S = load() || fresh();
+  let view = 'today';
+
+  // ---------- 小工具 ----------
+  const app = document.getElementById('app');
+  let acts = {};
+  let actSeq = 0;
+  function act(fn) { const k = 'a' + (++actSeq); acts[k] = fn; return k; }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  function fill(tpl, vars) {
+    return cap(String(tpl || '').replace(/\{(\w+)\}/g, (_, k) => (vars[k] != null ? vars[k] : '')));
+  }
+  function fmtMin(ms) { return Math.max(0, Math.round(ms / 60000)) + ' 分钟'; }
+  function fmtDate(t) { const d = new Date(t); return `${d.getMonth() + 1}月${d.getDate()}日`; }
+  function char(id) { return LEVEL.characters[id] || { name: id === 'me' ? '你' : id, color: '#ffd166' }; }
+  function stepAt(i) { return LEVEL.steps[i]; }
+  function target(id) { return LEVEL.targets.find((t) => t.id === id); }
+
+  // ---------- 合成语音 ----------
+  const canSpeak = typeof window.speechSynthesis !== 'undefined' && typeof window.SpeechSynthesisUtterance !== 'undefined';
+  function say(text, slow) {
+    if (!canSpeak) return;
+    try {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = slow ? 0.65 : 0.92;
+      const v = speechSynthesis.getVoices().find((x) => /^en[-_]US/i.test(x.lang));
+      if (v) u.voice = v;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    } catch (e) { /* 没有语音就只看字幕 */ }
+  }
+
+  // ---------- 一局的状态 ----------
+  function startRun() {
+    S.run = {
+      id: 'run' + Date.now(), levelId: LEVEL.id, stepIndex: 0, startedAt: Date.now(),
+      playMs: 0, score: 0, plays: 0, sub: null,
+    };
+    enterStep();
+  }
+  function enterStep() {
+    const st = stepAt(S.run.stepIndex);
+    S.run.sub = { phase: st.type === 'court' ? 'choose' : 'main', hint: 0, log: [], awaiting: true, done: false };
+    const sub = S.run.sub;
+    if (st.type === 'speak') pushLine(sub, st.speaker, st.line, st.lineZh);
+    if (st.type === 'court') pushSys(sub, st.situation);
+    if (st.type === 'listen') sub.heard = {};
+    save();
+  }
+  function nextStep() {
+    S.run.stepIndex += 1;
+    if (S.run.stepIndex >= LEVEL.steps.length) return finishRun();
+    enterStep();
+    render();
+  }
+  function finishRun() {
+    tickTime();
+    const r = S.run;
+    S.progress[LEVEL.id] = {
+      status: 'done', completedAt: Date.now(), lastScore: r.score, lastPlays: r.plays,
+      lastMs: r.playMs, times: ((S.progress[LEVEL.id] || {}).times || 0) + 1,
+    };
+    S.totals.runsDone += 1;
+    S.lastFinished = { score: r.score, plays: r.plays, ms: r.playMs };
+    S.run = null;
+    save();
+    view = 'finished';
+    render();
+  }
+  let resumedAt = null;
+  function tickTime() {
+    if (S.run && resumedAt) {
+      const d = Date.now() - resumedAt;
+      S.run.playMs += d;
+      S.totals.playMs += d;
+    }
+    resumedAt = null;
+  }
+  function pushLine(sub, who, text, zh) { sub.log.push({ who, text, zh }); if (who !== 'me') say(text); }
+  function pushSys(sub, text) { sub.log.push({ who: 'sys', text }); }
+
+  // ---------- 作答 ----------
+  function currentSpec() {
+    const st = stepAt(S.run.stepIndex);
+    const sub = S.run.sub;
+    return sub.phase === 'follow' ? st.followUp : st;
+  }
+  function vars() {
+    const st = stepAt(S.run.stepIndex);
+    const sub = S.run.sub;
+    const skill = S.player.skill || 'passing';
+    const opt = st.options && st.options.find((o) => o.id === sub.executed);
+    return {
+      skill, skillZh: SKILL_ZH[skill] || skill,
+      optionName: opt ? (opt.id === 'me' ? 'yourself' : char(opt.id).name) : '',
+    };
+  }
+
+  function submit(mode, text, asrUncertain) {
+    const st = stepAt(S.run.stepIndex);
+    const sub = S.run.sub;
+    const spec = currentSpec();
+    const match = mode === 'click' ? null : E.matchUtterance(spec, text);
+    const ev = E.makeEvidence({
+      levelId: LEVEL.id, stepId: st.id + (sub.phase === 'follow' ? ':follow' : ''),
+      targetId: spec.target || st.target, text, match, hintLevel: sub.hint,
+      inputMode: mode, asrUncertain, now: Date.now(),
+    });
+    ev.runId = S.run.id;
+    S.evidence.push(ev);
+    S.learning[ev.targetId] = E.updateLearning(S.learning[ev.targetId], ev);
+
+    if (mode !== 'click' && text) pushLine(sub, 'me', text);
+    const speaker = st.type === 'court' ? null : st.speaker;
+
+    if (ev.result === 'asr_uncertain') {
+      pushLine(sub, speaker || 'coach', "Sorry, I didn't catch that. Can you say it again?", '抱歉，没听清。能再说一遍吗？（不算你说错）');
+      return afterAnswer();
+    }
+    if (ev.result === 'empty') { pushSys(sub, '还没有内容。'); return afterAnswer(); }
+    if (!E.advancesStory(ev.result)) {
+      pushLine(sub, speaker || 'coach', match.reply);
+      return afterAnswer();
+    }
+
+    // 剧情推进：意思清楚、看提示、看答案、点击继续都推进；只是学习记录不同
+    let intent = match ? match.intent : null;
+    if (mode === 'click') {
+      intent = st.type === 'court'
+        ? (spec.intents.find((i) => i.option === sub.chosen) || spec.intents[0])
+        : spec.intents[0];
+    }
+    if (match && match.slots && match.slots.skill && sub.phase !== 'follow') S.player.skill = match.slots.skill;
+    if (st.type === 'speak' && sub.phase === 'main' && intent.slot && !S.player.skill) S.player.skill = intent.slot.default;
+
+    const v = vars();
+    const replyWho = intent.speaker || speaker || 'coach';
+    const reply = (ev.result === 'keyword' || (match && match.quality === 'partial')) && intent.replyKeyword
+      ? intent.replyKeyword : intent.reply;
+    if (mode === 'click') pushSys(sub, '剧情继续（这一句没有算作口语练习，之后会再练）');
+    pushLine(sub, replyWho, fill(reply, v));
+
+    if (st.type === 'court' && sub.phase === 'speak') {
+      sub.executed = intent.option;
+      if (sub.chosen && sub.executed !== sub.chosen) {
+        const o = st.options.find((x) => x.id === sub.executed);
+        pushSys(sub, `你说的是「${o.label}」，队友按你说的做。`);
+      }
+      sub.firstQuality = ev.result;
+      S.run.plays += 1;
+      sub.phase = 'action';
+      sub.awaiting = false;
+      save();
+      return render();
+    }
+
+    // 成句、没看提示，才进追问（挑战层）；其余直接收尾
+    if (sub.phase === 'main' && st.followUp && st.followUp.when === 'sentence' && ev.result === 'independent') {
+      startFollow(st);
+    } else {
+      sub.awaiting = false;
+      sub.done = true;
+    }
+    afterAnswer();
+  }
+  function startFollow(st) {
+    const sub = S.run.sub;
+    sub.phase = 'follow';
+    sub.hint = 0;
+    sub.awaiting = true;
+    sub.done = false;
+    const v = vars();
+    pushLine(sub, st.type === 'court' ? 'coach' : st.speaker, fill(st.followUp.line, v), fill(st.followUp.lineZh, v));
+  }
+  function afterAnswer() { save(); render(); }
+
+  // ---------- 渲染：外壳 ----------
+  let resetArmed = false;
+  function render() {
+    acts = {};
+    if (view !== 'parent') resetArmed = false;
+    stopTiming();
+    let html;
+    if (view === 'play' && S.run) html = renderPlay();
+    else if (view === 'finished') html = renderFinished();
+    else if (view === 'team') html = renderTeam();
+    else if (view === 'growth') html = renderGrowth();
+    else if (view === 'parent') html = renderParent();
+    else html = renderToday();
+    const showNav = !(view === 'play' && S.run);
+    app.innerHTML = html + (showNav ? renderNav() : '');
+    app.querySelectorAll('[data-act]').forEach((el) => {
+      const fn = acts[el.getAttribute('data-act')];
+      if (fn) el.addEventListener('click', (e) => { e.preventDefault(); fn(el, e); });
+    });
+    app.querySelectorAll('[data-change]').forEach((el) => {
+      const fn = acts[el.getAttribute('data-change')];
+      if (fn) el.addEventListener('change', () => fn(el));
+    });
+    if (view === 'play' && S.run && S.run.sub && S.run.sub.phase === 'action') startTiming();
+    const chat = app.querySelector('.chat');
+    if (chat) chat.lastElementChild && chat.lastElementChild.scrollIntoView({ block: 'nearest' });
+  }
+  function go(v) { tickTime(); view = v; if (v === 'play' && S.run) resumedAt = Date.now(); render(); window.scrollTo(0, 0); }
+
+  function renderNav() {
+    const items = [['today', '🏀', '今日'], ['team', '👕', '球队'], ['growth', '📈', '成长']];
+    return `<nav class="nav">${items.map(([k, ico, label]) =>
+      `<button class="${view === k || (k === 'growth' && view === 'parent') ? 'on' : ''}" data-act="${act(() => go(k))}"><span class="ico">${ico}</span>${label}</button>`
+    ).join('')}</nav>`;
+  }
+
+  // ---------- 今日 ----------
+  function renderToday() {
+    const p = S.progress[LEVEL.id];
+    const r = S.run;
+    const total = LEVEL.steps.length;
+    let main;
+    if (r) {
+      main = `<p class="muted">上次停在第 ${r.stepIndex + 1}/${total} 段：${esc(stepAt(r.stepIndex).chapter)}</p>
+        <button class="btn primary block" data-act="${act(() => go('play'))}">继续上次进度</button>`;
+    } else if (p && p.status === 'done') {
+      main = `<p>✅ 今天的任务完成了（${fmtDate(p.completedAt)}）</p>
+        <button class="btn block" data-act="${act(() => { startRun(); go('play'); })}">再玩一次（不会重复发奖励）</button>`;
+    } else {
+      main = `<button class="btn primary block" data-act="${act(() => { startRun(); go('play'); })}">开始今日任务</button>`;
+    }
+    return `<div class="page">
+      <h1>今日</h1>
+      <div class="banner-sim">原型版：语音是模拟的——孩子说完，把他说的话打进输入框。这样的记录不算真实口语。</div>
+      <div class="card hero">
+        <div class="chapter">第 1 天 · ${esc(LEVEL.scene)}</div>
+        <h2 style="margin-top:4px">${esc(LEVEL.title)} <span class="muted small">${esc(LEVEL.titleEn)}</span></h2>
+        <p>${esc(LEVEL.goal)}</p>
+        <p class="muted">预计 ${LEVEL.estimatedMinutes} 分钟 · 可以随时离开，进度会保存</p>
+        ${main}
+      </div>
+      <div class="card">
+        <div class="muted small">今天的队友</div>
+        <div class="row" style="margin-top:6px">
+          ${['alex', 'ben'].map((id) => `<span class="tag">${esc(char(id).name)} · ${esc(char(id).trait)}</span>`).join('')}
+          <span class="tag virtual">对手 Red Hawks（电脑角色）</span>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // ---------- 一局 ----------
+  function renderPlay() {
+    const r = S.run;
+    const st = stepAt(r.stepIndex);
+    const pct = Math.round((r.stepIndex / LEVEL.steps.length) * 100);
+    const head = `<div class="topbar">
+        <button class="btn ghost" data-act="${act(() => { save(); go('today'); })}">← 先离开</button>
+        <div class="title">${esc(LEVEL.title)}</div>
+        <span class="tag">比分 ${r.score}</span>
+      </div>
+      <div class="progress"><i style="width:${pct}%"></i></div>
+      <div class="chapter">${esc(st.chapter)}</div>`;
+    let body = '';
+    if (st.type === 'speak') body = renderSpeak(st);
+    else if (st.type === 'listen') body = renderListen(st);
+    else if (st.type === 'court') body = renderCourt(st);
+    else if (st.type === 'feedback') body = renderFeedback();
+    else if (st.type === 'reward') body = renderReward(st);
+    return `<div class="page play">${head}${body}</div>`;
+  }
+
+  function renderBubble(m, i) {
+    if (m.who === 'sys') return `<div class="bubble sys">${esc(m.text)}</div>`;
+    if (m.who === 'me') return `<div class="bubble me"><div class="who">你 <span class="tag sim">模拟语音</span></div>${esc(m.text)}</div>`;
+    const c = char(m.who);
+    const sub = S.run && S.run.sub;
+    const shown = !canSpeak || S.settings.subtitles || (sub && sub.reveal && sub.reveal[i]);
+    const text = shown ? esc(m.text) : '<span class="hidden-text">（点「字幕」看文字）</span>';
+    return `<div class="bubble"><div class="who"><span class="dot" style="background:${c.color}"></span>${esc(c.name)}${c.virtual ? ' <span class="tag virtual">虚构角色</span>' : ''}</div>
+      ${text}${shown && m.zh && sub && sub.zh && sub.zh[i] ? `<div class="zh">${esc(m.zh)}</div>` : ''}
+      <div class="audio">
+        ${canSpeak ? `<button data-act="${act(() => say(m.text))}">▶ 听</button><button data-act="${act(() => say(m.text, true))}">🐢 慢速</button>` : ''}
+        ${shown ? (m.zh ? `<button data-act="${act(() => toggle('zh', i))}">中文</button>` : '') : `<button data-act="${act(() => toggle('reveal', i))}">字幕</button>`}
+      </div></div>`;
+  }
+  function toggle(key, i) {
+    const sub = S.run.sub;
+    sub[key] = sub[key] || {};
+    sub[key][i] = !sub[key][i];
+    save();
+    render();
+  }
+
+  function renderChat(sub) {
+    return `<div class="chat">${sub.log.map(renderBubble).join('')}</div>`;
+  }
+
+  function renderHints(spec, level) {
+    return spec.hints.filter((h) => h.level <= level).map((h) => {
+      if (h.words) return `<div class="hint"><b>${h.label}</b>：${h.words.map(esc).join(' · ')}</div>`;
+      if (h.pattern) return `<div class="hint"><b>${h.label}</b>：${esc(h.pattern)}</div>`;
+      return `<div class="hint"><b>${h.label}</b>：${esc(h.full)} <span class="muted small">（照着说也能继续，但这句不算自己说出）</span></div>`;
+    }).join('');
+  }
+
+  function renderSpeakBox(spec, optional) {
+    const sub = S.run.sub;
+    const maxHint = spec.hints.length;
+    const id = 'say-' + actSeq;
+    const send = act(() => {
+      const el = document.getElementById(id);
+      const text = el ? el.value : '';
+      submit('simulated', text, false);
+    });
+    return `<div class="speak-box">
+      ${renderHints(spec, sub.hint)}
+      <div class="muted small">🎤 孩子开口说，说完把他说的话打在下面（模拟录音）</div>
+      <textarea id="${id}" placeholder="例如他说的英文…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn primary grow" data-act="${send}">说完了</button>
+        <button class="btn sim" data-act="${act(() => submit('simulated', '', true))}">模拟：没听清</button>
+      </div>
+      <div class="row" style="margin-top:8px">
+        ${sub.hint < maxHint ? `<button class="btn" data-act="${act(() => { sub.hint += 1; save(); render(); })}">💡 ${sub.hint === 0 ? '要一点提示' : '再多一点'}</button>` : ''}
+        ${sub.hint >= maxHint ? `<button class="btn" data-act="${act(() => submit('click', '', false))}">点击继续（这句之后再练）</button>` : ''}
+        ${optional ? `<button class="btn ghost" data-act="${act(() => { sub.awaiting = false; sub.done = true; afterOptionalSkip(); })}">先跳过这个问题</button>` : ''}
+      </div>
+    </div>`;
+  }
+  function afterOptionalSkip() {
+    const st = stepAt(S.run.stepIndex);
+    pushSys(S.run.sub, '跳过了追问，没关系。');
+    if (st.type === 'court') S.run.sub.phase = 'result';
+    save();
+    render();
+  }
+
+  function renderSpeak(st) {
+    const sub = S.run.sub;
+    const spec = currentSpec();
+    let tail = '';
+    if (sub.awaiting) tail = renderSpeakBox(spec, sub.phase === 'follow' && st.followUp.optional);
+    else tail = `<button class="btn primary block" style="margin-top:12px" data-act="${act(nextStep)}">继续</button>`;
+    return renderChat(sub) + tail;
+  }
+
+  // ---------- 听队友 ----------
+  function renderListen(st) {
+    const sub = S.run.sub;
+    const heardAll = st.messages.every((_, i) => sub.heard[i]);
+    const msgs = st.messages.map((m, i) => {
+      const c = char(m.from);
+      const shown = !canSpeak || S.settings.subtitles || (sub.reveal && sub.reveal[i]);
+      return `<div class="bubble"><div class="who"><span class="dot" style="background:${c.color}"></span>${esc(c.name)} · ${esc(c.role)} <span class="tag virtual">虚构角色</span></div>
+        ${shown ? esc(m.text) : '<span class="hidden-text">语音消息</span>'}
+        ${shown && sub.zh && sub.zh[i] ? `<div class="zh">${esc(m.textZh)}</div>` : ''}
+        <div class="audio">
+          ${canSpeak ? `<button data-act="${act(() => { say(m.text); sub.heard[i] = true; save(); render(); })}">▶ ${sub.heard[i] ? '再听' : '听'}</button>
+          <button data-act="${act(() => { say(m.text, true); sub.heard[i] = true; save(); render(); })}">🐢 慢速</button>` : ''}
+          ${shown ? `<button data-act="${act(() => toggle('zh', i))}">中文</button>` : `<button data-act="${act(() => { toggle('reveal', i); })}">字幕</button>`}
+        </div></div>`;
+    }).join('');
+    const ready = heardAll || !canSpeak || (sub.reveal && Object.keys(sub.reveal).length);
+    let check = '';
+    if (ready) {
+      check = `<div class="card"><b>${esc(st.check.question)}</b>
+        <div class="row" style="margin-top:8px">${st.check.options.map((id) =>
+          `<button class="btn grow" data-act="${act(() => answerCheck(st, id))}">${esc(char(id).name)}</button>`).join('')}</div>
+        ${sub.checkMsg ? `<p class="muted">${esc(sub.checkMsg)}</p>` : ''}</div>`;
+    } else {
+      check = `<p class="muted">先听一听两位队友的语音消息。</p>`;
+    }
+    return `<p class="muted">队友给你发来了消息：</p><div class="chat">${msgs}</div>${check}`;
+  }
+  function answerCheck(st, id) {
+    const sub = S.run.sub;
+    if (id === st.check.answer) {
+      S.learning[st.target] = E.markUnderstood(S.learning[st.target], st.target, Date.now());
+      save();
+      nextStep();
+    } else {
+      sub.checkMsg = st.check.wrongReply;
+      save();
+      render();
+    }
+  }
+
+  // ---------- 球场 ----------
+  const HOOP = [50, 8];
+  function courtSvg(st, sub) {
+    const P = st.positions;
+    const pickable = sub.phase === 'choose';
+    const ids = st.options.map((o) => o.id);
+    const ballAt = sub.ballPos || P.me;
+    const players = [
+      ['me', P.me, '#ffd166', '你'],
+      ['alex', P.alex, char('alex').color, 'A'],
+      ['ben', P.ben, char('ben').color, 'B'],
+      ['o1', P.o1, char('opponents').color, ''],
+      ['o2', P.o2, char('opponents').color, ''],
+      ['o3', P.o3, char('opponents').color, ''],
+    ];
+    const circles = players.map(([id, [x, y], color, label]) => {
+      const canPick = pickable && ids.includes(id);
+      const on = sub.chosen === id;
+      return `<g class="player ${canPick && !on ? 'pick' : ''}" ${canPick ? `data-act="${act(() => choose(id))}"` : ''}>
+        ${on ? `<circle cx="${x}" cy="${y}" r="7" fill="none" stroke="#ff8a2a" stroke-width="1.2"/>` : ''}
+        <circle cx="${x}" cy="${y}" r="4.6" fill="${color}" stroke="#0b1428" stroke-width=".6"/>
+        <text x="${x}" y="${y + 1.5}" text-anchor="middle" font-size="4" font-weight="700" fill="#0b1428">${label}</text>
+      </g>`;
+    }).join('');
+    return `<div class="court-wrap"><svg viewBox="0 0 100 80" role="img" aria-label="三对三半场">
+      <rect x="2" y="2" width="96" height="76" fill="none" stroke="var(--court-line)" stroke-width=".6"/>
+      <rect x="34" y="2" width="32" height="26" fill="rgba(255,255,255,.08)" stroke="var(--court-line)" stroke-width=".6"/>
+      <path d="M8 2 L8 14 A42 42 0 0 0 92 14 L92 2" fill="none" stroke="var(--court-line)" stroke-width=".6"/>
+      <circle cx="50" cy="28" r="8" fill="none" stroke="var(--court-line)" stroke-width=".6"/>
+      <line x1="44" y1="5" x2="56" y2="5" stroke="#fff" stroke-width=".8"/>
+      <circle cx="${HOOP[0]}" cy="${HOOP[1]}" r="2.6" fill="none" stroke="#ff5a1f" stroke-width=".9"/>
+      ${circles}
+      <g id="ball" style="transform: translate(${ballAt[0] + 3.5}px, ${ballAt[1] - 3.5}px)">
+        <circle cx="0" cy="0" r="2" fill="#ff7a1a" stroke="#3a1a00" stroke-width=".4"/>
+      </g>
+    </svg></div>
+    <div class="row muted small" style="margin-top:6px"><span>🟡 你</span><span>🔵 Alex</span><span>🟢 Ben</span><span>🔴 Red Hawks（电脑）</span></div>`;
+  }
+  function choose(id) { S.run.sub.chosen = id; save(); render(); }
+
+  function renderCourt(st) {
+    const sub = S.run.sub;
+    let html = courtSvg(st, sub);
+    if (sub.phase === 'choose') {
+      html += `<p>${esc(st.situation)}</p><p class="muted small">先想好战术：点场上的队友，或点下面的选项。两种都说得通。</p>
+        <div class="opts">${st.options.map((o) => `<button class="opt ${sub.chosen === o.id ? 'on' : ''}" data-act="${act(() => choose(o.id))}">
+          <b>${esc(o.label)}</b><div class="why">${esc(o.why)}</div></button>`).join('')}</div>
+        <button class="btn primary block" ${sub.chosen ? '' : 'disabled'} data-act="${act(() => {
+          if (!sub.chosen) return;
+          sub.phase = 'speak';
+          pushLine(sub, 'coach', st.coachLine, st.coachLineZh);
+          save(); render();
+        })}">想好了，告诉队友</button>`;
+      return html;
+    }
+    html += renderChat(sub);
+    if (sub.phase === 'speak') {
+      html += `<p class="muted small">用英语告诉队友你的计划。队友会照你说的做。</p>` + renderSpeakBox(st, false);
+    } else if (sub.phase === 'action') {
+      const opt = st.options.find((o) => o.id === sub.executed);
+      html += `<div class="card"><b>${esc(st.action.label)}！</b> <span class="muted small">指针走到绿色区域时点按钮</span>
+        <div class="timing"><div class="zone"></div><div class="zone core"></div><div class="marker" id="marker"></div></div>
+        <button class="btn primary block" id="go-btn">${opt && opt.id === 'me' ? '投篮' : '传球'}</button></div>`;
+    } else if (sub.phase === 'result') {
+      html += `<div class="result-big">${esc(sub.outcome)}</div>
+        <button class="btn primary block" data-act="${act(nextStep)}">继续</button>`;
+    } else if (sub.phase === 'follow') {
+      html += sub.awaiting ? renderSpeakBox(st.followUp, st.followUp.optional)
+        : `<button class="btn primary block" style="margin-top:12px" data-act="${act(() => { sub.phase = 'result'; save(); render(); })}">继续</button>`;
+    }
+    return html;
+  }
+
+  // 操作手感小条
+  let raf = null;
+  function stopTiming() { if (raf) cancelAnimationFrame(raf); raf = null; }
+  function startTiming() {
+    const marker = document.getElementById('marker');
+    const btn = document.getElementById('go-btn');
+    if (!marker || !btn) return;
+    const t0 = performance.now();
+    let pos = 0;
+    const loop = (t) => {
+      const ph = ((t - t0) / 1500) % 2;
+      pos = ph < 1 ? ph : 2 - ph;
+      marker.style.left = (pos * 100) + '%';
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    btn.addEventListener('click', () => { stopTiming(); btn.disabled = true; resolvePlay(E.timingGrade(pos)); });
+  }
+  function resolvePlay(grade) {
+    const st = stepAt(S.run.stepIndex);
+    const sub = S.run.sub;
+    const opt = st.options.find((o) => o.id === sub.executed);
+    const P = st.positions;
+    const paths = {
+      ben_shoots: [P.ben, HOOP], alex_relay: [P.alex, P.ben, HOOP],
+      alex_shoots: [P.alex, HOOP], me_shoots: [HOOP],
+    };
+    const path = paths[opt.result] || [HOOP];
+    const outcome = E.playOutcome(grade);
+    const ball = document.getElementById('ball');
+    let i = 0;
+    const stepBall = () => {
+      if (i >= path.length) {
+        S.run.score += outcome.score;
+        const gradeZh = { great: '时机完美', good: '时机不错', miss: '时机偏了一点' }[grade];
+        sub.outcome = `${gradeZh}。${outcome.text}`;
+        sub.ballPos = null;
+        if (st.followUp && sub.firstQuality === 'independent') { pushSys(sub, sub.outcome); startFollow(st); }
+        else sub.phase = 'result';
+        save();
+        render();
+        return;
+      }
+      const [x, y] = path[i++];
+      if (ball) ball.style.transform = `translate(${x + (i === path.length ? 0 : 3.5)}px, ${y - (i === path.length ? 0 : 3.5)}px)`;
+      setTimeout(stepBall, 500);
+    };
+    stepBall();
+  }
+
+  // ---------- 收尾 ----------
+  function renderFeedback() {
+    const runEv = S.evidence.filter((e) => e.runId === S.run.id);
+    const fb = E.pickFeedback(runEv, LEVEL);
+    return `<div class="card hero"><div class="who"><b>Coach Lee</b> <span class="tag virtual">虚构角色</span></div>
+      <p>Good job today! 今天只说一个小建议：</p>
+      <p style="font-size:17px">${esc(fb.text)}</p></div>
+      <button class="btn primary block" data-act="${act(nextStep)}">好的</button>`;
+  }
+
+  function renderReward(st) {
+    const rw = st.reward;
+    const sub = S.run.sub;
+    const already = !!S.game.rewards[rw.id];
+    const cur = sub.jersey || S.game.jersey || { number: rw.numbers[0], color: rw.colors[0].id };
+    sub.jersey = cur;
+    const color = rw.colors.find((c) => c.id === cur.color) || rw.colors[0];
+    return `<div class="card hero" style="text-align:center">
+        <div class="chapter">${already ? '队服已领过 · 可以改号码和颜色' : '首关奖励'}</div>
+        <h2>${esc(rw.label)}</h2>
+        ${jerseySvg(color.hex, cur.number)}
+      </div>
+      <b>选号码</b>
+      <div class="grid-pick">${rw.numbers.map((n) => `<button class="${cur.number === n ? 'on' : ''}" data-act="${act(() => { sub.jersey = Object.assign({}, cur, { number: n }); save(); render(); })}">${n}</button>`).join('')}</div>
+      <b>选颜色</b>
+      <div class="grid-pick">${rw.colors.map((c) => `<button class="${cur.color === c.id ? 'on' : ''}" data-act="${act(() => { sub.jersey = Object.assign({}, cur, { color: c.id }); save(); render(); })}"><span class="swatch" style="background:${c.hex}"></span>${esc(c.label)}</button>`).join('')}</div>
+      <button class="btn primary block" style="margin-top:12px" data-act="${act(() => {
+        const res = E.grantOnce(S.game, rw.id, Date.now());
+        S.game = res.game;
+        S.game.jersey = sub.jersey;
+        S.run.rewardGranted = res.granted;
+        nextStep();
+      })}">${already ? '保存队服' : '领取队服，完成今天'}</button>`;
+  }
+  function jerseySvg(hex, num) {
+    return `<svg viewBox="0 0 100 90" width="150" height="135" aria-label="队服">
+      <path d="M30 8 L42 4 Q50 12 58 4 L70 8 L90 22 L80 36 L72 30 L72 86 L28 86 L28 30 L20 36 L10 22 Z" fill="${hex}" stroke="#fff" stroke-width="1.5"/>
+      <text x="50" y="66" text-anchor="middle" font-size="30" font-weight="800" fill="#fff">${num}</text>
+      <text x="50" y="30" text-anchor="middle" font-size="7" fill="#fff">${esc(S.team.name.toUpperCase())}</text>
+    </svg>`;
+  }
+
+  function renderFinished() {
+    const f = S.lastFinished || {};
+    const p = S.progress[LEVEL.id] || {};
+    return `<div class="page"><h1>今天完成啦 🏆</h1>
+      <div class="card hero">
+        <div class="stat-row">
+          <div class="stat"><b>${f.plays || 0}</b><span>次沟通配合</span></div>
+          <div class="stat"><b>${f.score || 0}</b><span>比分</span></div>
+          <div class="stat"><b>${fmtMin(f.ms || 0)}</b><span>用时</span></div>
+        </div>
+        <p class="muted" style="margin-top:10px">${p.times > 1 ? '这是重玩：队服奖励只发一次，这次没有新增成果。' : '球队记住了你今天的表现。'}</p>
+      </div>
+      ${S.game.jersey ? `<div class="card" style="text-align:center">${jerseySvg(colorHex(S.game.jersey.color), S.game.jersey.number)}</div>` : ''}
+      <p class="muted">过两天，Alex 和 Ben 会换位置，再看你能不能用今天的说法。</p>
+      <button class="btn primary block" data-act="${act(() => go('growth'))}">看看成长</button>
+    </div>`;
+  }
+  function colorHex(id) {
+    const rw = LEVEL.steps.find((s) => s.type === 'reward').reward;
+    return (rw.colors.find((c) => c.id === id) || rw.colors[0]).hex;
+  }
+
+  // ---------- 球队 ----------
+  function renderTeam() {
+    const skill = S.player.skill;
+    const nameId = 'team-name';
+    const members = [
+      { name: '你（队长）', color: '#ffd166', role: skill ? `擅长${SKILL_ZH[skill] || skill}` : '还没介绍自己', num: S.game.jersey ? S.game.jersey.number : '?' },
+      { name: 'Alex', color: char('alex').color, role: `${char('alex').role} · ${char('alex').trait}`, num: char('alex').number, virtual: true },
+      { name: 'Ben', color: char('ben').color, role: `${char('ben').role} · ${char('ben').trait}`, num: char('ben').number, virtual: true },
+    ];
+    return `<div class="page"><h1>球队</h1>
+      <div class="card">
+        <b>队名</b>
+        <div class="row" style="margin-top:6px"><input type="text" id="${nameId}" class="grow" value="${esc(S.team.name)}" maxlength="24">
+        <button class="btn" data-act="${act(() => { const v = document.getElementById(nameId).value.trim(); if (v) { S.team.name = v; save(); render(); } })}">保存</button></div>
+      </div>
+      ${S.game.jersey ? `<div class="card" style="text-align:center">${jerseySvg(colorHex(S.game.jersey.color), S.game.jersey.number)}</div>`
+        : '<div class="card muted">完成第一次训练赛后，可以选队服号码和颜色。</div>'}
+      <h2>阵容（三对三）</h2>
+      <div class="card roster">${members.map((m) => `<div class="member">
+        <div class="avatar" style="background:${m.color}">${esc(m.num)}</div>
+        <div><b>${esc(m.name)}</b> ${m.virtual ? '<span class="tag virtual">虚构电脑角色</span>' : ''}<div class="muted small">${esc(m.role)}</div></div>
+      </div>`).join('')}</div>
+      <div class="card"><b>对手：Red Hawks</b> <span class="tag virtual">电脑角色</span><div class="muted small">三名虚构对手，只在球场上出现。</div></div>
+    </div>`;
+  }
+
+  // ---------- 成长 ----------
+  function abilityStatus(targetId) {
+    const s = S.learning[targetId];
+    if (!s) return ['未开始', ''];
+    if (s.spacedAt) return ['间隔后仍能用', 'ok'];
+    if (s.independentAt) return ['独立能用', 'ok'];
+    if (s.simulatedIndependentAt) return ['自己说出（模拟输入）', 'sim'];
+    if (s.promptedAt) return ['提示后能说', 'hint'];
+    if (s.lastResult === 'full_answer' || s.lastResult === 'click_continue') return ['看过答案，待再练', 'hint'];
+    if (s.lastResult === 'keyword') return ['能说关键词', 'hint'];
+    if (s.understoodAt) return ['听懂', ''];
+    return ['练过', ''];
+  }
+  function renderGrowth() {
+    const p = S.progress[LEVEL.id];
+    return `<div class="page"><h1>成长</h1>
+      <div class="card"><b>章节</b>
+        <div class="ability"><span>第 1 天 · ${esc(LEVEL.title)}</span><span class="status ${p ? 'ok' : ''}">${p ? '已完成' : '未完成'}</span></div>
+        <div class="ability muted"><span>第 2 天 · 约队友训练</span><span class="status">之后开放</span></div>
+      </div>
+      <div class="card"><b>能力</b>
+        ${LEVEL.abilities.map((a) => {
+          const [label, cls] = abilityStatus(a.target);
+          const s = S.learning[a.target];
+          return `<div class="ability"><div>${esc(a.label)}<div class="muted small">${esc(target(a.target).text)}${s && s.nextReviewAt ? ` · ${fmtDate(s.nextReviewAt)}再见` : ''}</div></div>
+            <span class="status ${cls}">${label}</span></div>`;
+        }).join('')}
+      </div>
+      <p class="muted small">成长只看能用什么说法，不换算成词汇量；游戏比分也不算进来。</p>
+      <button class="btn ghost block" data-act="${act(() => go('parent'))}">家长入口</button>
+    </div>`;
+  }
+
+  // ---------- 家长 ----------
+  function renderParent() {
+    const ev = S.evidence;
+    const count = (r) => ev.filter((e) => e.result === r).length;
+    const recent = ev.slice(-30).reverse();
+    return `<div class="page"><h1>家长</h1>
+      <div class="banner-sim">原型没有家长验证。正式版要由服务端校验家长身份，前端隐藏入口不算。</div>
+      <div class="card"><b>参与情况</b>
+        <div class="stat-row" style="margin-top:8px">
+          <div class="stat"><b>${S.totals.runsDone}</b><span>完成次数</span></div>
+          <div class="stat"><b>${fmtMin(S.totals.playMs)}</b><span>累计用时</span></div>
+          <div class="stat"><b>${ev.length}</b><span>作答条数</span></div>
+        </div></div>
+      <div class="card"><b>表达与提示</b>
+        <div class="stat-row" style="margin-top:8px">
+          <div class="stat"><b>${count('independent')}</b><span>自己成句</span></div>
+          <div class="stat"><b>${count('keyword')}</b><span>只说关键词</span></div>
+          <div class="stat"><b>${count('with_hint')}</b><span>看提示后</span></div>
+          <div class="stat"><b>${count('full_answer') + count('click_continue')}</b><span>看答案 / 点击</span></div>
+          <div class="stat"><b>${count('asr_uncertain')}</b><span>没听清</span></div>
+          <div class="stat"><b>${ev.filter((e) => e.spokenEvidence).length}</b><span>真实口语证据</span></div>
+        </div>
+        <p class="muted small">原型里都是模拟输入，「真实口语证据」会一直是 0，这是对的。</p></div>
+      <div class="card"><b>最近作答</b>
+        ${recent.length ? `<table><tr><th>说了什么</th><th>结果</th><th>提示</th><th>方式</th></tr>
+          ${recent.map((e) => `<tr><td>${esc(e.text || '—')}<div class="muted">${esc(target(e.targetId) ? target(e.targetId).text : '')}</div></td>
+            <td>${esc(RESULT_ZH[e.result] || e.result)}</td><td>${e.hintLevel ? ['', '关键词', '句型', '完整答案'][e.hintLevel] : '无'}</td>
+            <td>${esc(MODE_ZH[e.inputMode] || e.inputMode)}</td></tr>`).join('')}</table>` : '<p class="muted">还没有作答。</p>'}
+      </div>
+      <div class="card"><b>设置</b>
+        <label class="switch"><span>字幕默认打开<div class="muted small">关着时先听，想看再点「字幕」</div></span>
+          <input type="checkbox" ${S.settings.subtitles ? 'checked' : ''} data-change="${act((el) => { S.settings.subtitles = el.checked; save(); })}"></label>
+        <label class="switch"><span>录音保留<div class="muted small">原型不录音。正式版默认处理后删除，只保留你们主动选的片段。</div></span><span class="muted">—</span></label>
+        <button class="btn block" style="margin-top:8px" data-act="${act(() => {
+          if (resetArmed) { resetArmed = false; S = fresh(); save(); view = 'today'; render(); }
+          else { resetArmed = true; render(); }
+        })}">${resetArmed ? '再点一次，确认清空这台设备上的原型数据' : '清空原型数据'}</button>
+      </div>
+    </div>`;
+  }
+
+  // ---------- 启动 ----------
+  if (canSpeak) { try { speechSynthesis.getVoices(); } catch (e) { /* 忽略 */ } }
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { tickTime(); save(); } else if (view === 'play') resumedAt = Date.now(); });
+  render();
+})();
+</script>

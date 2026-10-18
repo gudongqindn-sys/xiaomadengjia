@@ -1,0 +1,9 @@
+.DS_Store
+node_modules/
+*.log
+.env
+# 录音和孩子的数据不进仓库
+recordings/
+*.wav
+*.mp3
+*.m4a

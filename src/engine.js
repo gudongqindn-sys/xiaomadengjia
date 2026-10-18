@@ -157,13 +157,13 @@
     if (!advancesStory(ev.result)) return s; // 误听、追问、跑题不改学习状态
     s.attempts += 1;
     s.lastResult = ev.result;
-    if (ev.result === 'with_hint') s.promptedAt = s.promptedAt || ev.at;
+    if (ev.result === 'with_hint') s.promptedAt = s.promptedAt ?? ev.at;
     if (ev.result === 'independent' || ev.result === 'keyword') {
       if (ev.spokenEvidence) {
-        if (s.independentAt && ev.at - s.independentAt >= DAY) s.spacedAt = s.spacedAt || ev.at;
-        s.independentAt = s.independentAt || ev.at;
+        if (s.independentAt != null && ev.at - s.independentAt >= DAY) s.spacedAt = s.spacedAt ?? ev.at;
+        s.independentAt = s.independentAt ?? ev.at;
       } else if (ev.inputMode === 'simulated' && ev.result === 'independent') {
-        s.simulatedIndependentAt = s.simulatedIndependentAt || ev.at;
+        s.simulatedIndependentAt = s.simulatedIndependentAt ?? ev.at;
       }
     }
     const days = s.spacedAt ? 4 : (REVIEW_DAYS[ev.result] || 1);
@@ -173,7 +173,7 @@
 
   function markUnderstood(state, targetId, now) {
     const s = Object.assign({ targetId, attempts: 0 }, state || {});
-    s.understoodAt = s.understoodAt || now;
+    s.understoodAt = s.understoodAt ?? now;
     return s;
   }
 
