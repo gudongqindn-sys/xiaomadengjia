@@ -15,6 +15,22 @@
 
 阶段二（微信真机、真实录音、语音服务）要先有 AppID、语音服务账号和孩子的手机型号，见方案最后一节。
 
+## 画面和声音
+
+- 卡通竞技风：原创大头角色（代码画的 SVG，在 `prototype/art.js`）、记分牌、章节开场、进球大字和彩带
+- 音效现场合成，不用音频文件（`prototype/sfx.js`）：哨声、传球、进球、打框、欢呼
+- 角色配音预先生成在 `audio/`：教练、Alex、Ben、Mia 各一个固定声音。改了台词要重新生成：
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install edge-tts
+.venv/bin/python scripts/gen_voices.py
+node scripts/build.mjs
+```
+
+  用的是微软 Edge「大声朗读」的神经网络语音（非官方接口，免费、不用账号），只在原型阶段用；
+  正式上线前换成腾讯云等正规语音合成服务，`audio/manifest.json` 的格式不用变。
+  测试会检查每句台词都有配音文件，漏了就不过。
+
 ## 怎么试玩
 
 最简单：电脑上双击 `dist/basketball-english.html`，用浏览器打开。手机试：把这个文件发到手机上用浏览器打开。
@@ -27,7 +43,9 @@
 | - | - |
 | `content/level-01.json` | 首关内容：角色、目标表达、意图词表、提示三层、分支、奖励。**内容唯一来源**，人工审定改这里 |
 | `src/engine.js` | 规则引擎：意图匹配、作答归类、学习状态、奖励只发一次、反馈挑选。纯函数 |
-| `prototype/` | 网页原型（`level-data.js` 是生成的，不要手改） |
+| `prototype/` | 网页原型（`level-data.js`、`voice-data.js` 是生成的，不要手改） |
+| `audio/` | 角色配音和 `manifest.json`（谁说哪句 → 哪个文件） |
+| `scripts/gen_voices.py` | 生成配音 |
 | `scripts/build.mjs` | 从 JSON 生成 `prototype/level-data.js` 和单文件 `dist/` |
 | `tests/` | 引擎测试 + 内容结构检查 |
 

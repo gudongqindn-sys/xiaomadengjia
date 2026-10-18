@@ -1,4 +1,4 @@
-// 由 scripts/build.mjs 从 content/level-01.json 生成，不要手改
+// 由 scripts/build.mjs 生成，不要手改
 window.LEVEL_DATA = {
   "id": "level-01",
   "title": "第一次训练赛",
@@ -85,6 +85,7 @@ window.LEVEL_DATA = {
       "id": "s_intro",
       "type": "speak",
       "chapter": "进入球队",
+      "chapterEn": "JOIN THE TEAM",
       "speaker": "coach",
       "line": "Hi! I'm Coach Lee. Welcome to the team. What are you good at?",
       "lineZh": "嗨！我是李教练。欢迎加入球队。你擅长什么？",
@@ -257,6 +258,7 @@ window.LEVEL_DATA = {
       "id": "s_meet",
       "type": "listen",
       "chapter": "了解队友",
+      "chapterEn": "MEET YOUR SQUAD",
       "target": "t_good_at",
       "messages": [
         {
@@ -284,6 +286,7 @@ window.LEVEL_DATA = {
       "id": "s_play1",
       "type": "court",
       "chapter": "第一次配合",
+      "chapterEn": "FIRST PLAY",
       "situation": "你在三分线外持球。Ben 在左侧篮下没人防，Alex 在右侧也有空位。",
       "coachLine": "You have the ball. Tell your team the plan.",
       "coachLineZh": "球在你手上。把计划告诉队友。",
@@ -291,27 +294,27 @@ window.LEVEL_DATA = {
       "positions": {
         "me": [
           50,
-          62
+          66
         ],
         "alex": [
-          80,
-          46
+          82,
+          44
         ],
         "ben": [
-          18,
-          24
+          16,
+          26
         ],
         "o1": [
           50,
-          52
+          50
         ],
         "o2": [
-          72,
-          40
+          66,
+          36
         ],
         "o3": [
-          40,
-          22
+          38,
+          16
         ]
       },
       "options": [
@@ -485,6 +488,7 @@ window.LEVEL_DATA = {
       "id": "s_play2",
       "type": "court",
       "chapter": "暂停之后",
+      "chapterEn": "TIME-OUT",
       "situation": "暂停！对手现在盯住了 Ben。Alex 在右侧空位，你离篮筐也近了，前面没人。",
       "coachLine": "Time-out! They are guarding Ben now. What's your plan?",
       "coachLineZh": "暂停！他们现在盯住 Ben 了。你的计划是什么？",
@@ -492,27 +496,27 @@ window.LEVEL_DATA = {
       "positions": {
         "me": [
           46,
-          40
+          42
         ],
         "alex": [
-          82,
-          34
+          84,
+          32
         ],
         "ben": [
-          20,
-          26
+          18,
+          24
         ],
         "o1": [
-          24,
-          22
+          30,
+          13
         ],
         "o2": [
           30,
-          30
+          33
         ],
         "o3": [
-          64,
-          54
+          62,
+          60
         ]
       },
       "options": [
@@ -629,6 +633,7 @@ window.LEVEL_DATA = {
       "id": "s_interview1",
       "type": "speak",
       "chapter": "赛后采访",
+      "chapterEn": "POST-GAME",
       "speaker": "mia",
       "line": "Hi, I'm Mia from the school news. Great game! Which play worked well?",
       "lineZh": "嗨，我是校报的 Mia。打得真好！哪次配合效果好？",
@@ -693,6 +698,7 @@ window.LEVEL_DATA = {
       "id": "s_interview2",
       "type": "speak",
       "chapter": "赛后采访",
+      "chapterEn": "POST-GAME",
       "speaker": "mia",
       "line": "What do you want to do better next time?",
       "lineZh": "下次你想把什么做得更好？",
@@ -760,6 +766,7 @@ window.LEVEL_DATA = {
       "id": "s_reward",
       "type": "reward",
       "chapter": "收尾",
+      "chapterEn": "WRAP-UP",
       "reward": {
         "id": "r_level01_jersey",
         "label": "第一套队服",

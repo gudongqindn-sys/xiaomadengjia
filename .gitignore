@@ -7,3 +7,7 @@ recordings/
 *.wav
 *.mp3
 *.m4a
+.venv/
+
+# 配音文件要进仓库
+!audio/**/*.mp3

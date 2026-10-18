@@ -55,3 +55,18 @@ test('prototype/level-data.js 与 content/level-01.json 一致（改了 JSON 要
   const onDisk = readFileSync(join(__dirname, '../prototype/level-data.js'), 'utf8');
   assert.equal(onDisk, levelDataJs());
 });
+
+test('prototype/voice-data.js 与 audio/manifest.json 一致', async () => {
+  const { voiceDataJs } = await import('../scripts/build.mjs');
+  const onDisk = readFileSync(join(__dirname, '../prototype/voice-data.js'), 'utf8');
+  assert.equal(onDisk, voiceDataJs(false));
+});
+
+test('角色会说的每一句都有配音文件（改了台词要跑 scripts/gen_voices.py）', async () => {
+  const { voiceLines, voiceManifest } = await import('../scripts/build.mjs');
+  const { existsSync } = require('node:fs');
+  const m = voiceManifest();
+  const missing = voiceLines().filter((k) => !m[k]);
+  assert.deepEqual(missing, []);
+  for (const p of Object.values(m)) assert.ok(existsSync(join(__dirname, '..', p)), p + ' 不存在');
+});
